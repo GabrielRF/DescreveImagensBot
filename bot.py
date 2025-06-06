@@ -51,7 +51,7 @@ def describe_photo(photo_encoded):
     input=[
         {'role': 'user', 'content':
             [
-                {'type': 'input_text', 'text': 'Descreva a imagem'},
+                {'type': 'input_text', 'text': 'Descreva a imagem. Caso haja texto, transcreva ao fim da descrição. Não use formatação HTML ou Markdown.'},
                 {
                     'type': 'input_image',
                     'image_url': f'data:image/jpeg;base64,{photo_encoded}',
@@ -111,7 +111,7 @@ def cmd_start(message):
         f'👋 <b>Olá, {telebot.formatting.escape_html(message.from_user.first_name)}</b>,'
         '\n\n🖼 Sou responsável por descrever imagens enviadas a mim ou a grupos que faço parte.'
         '\n\n🧠 Utilizo a interligência artificial da OpenAI para gerar as descrições.'
-        #'\n\n⚙️ Possuo código aberto, disponível em: https://github.com/GabrielRF/DescreveImagensBot'
+        '\n\n⚙️ Possuo código aberto, disponível em: https://github.com/GabrielRF/DescreveImagensBot'
         '\n\n🆘 Contato com o desenvolvedor: https://chat.grf.xyz/DescreveImagensBot'
     )
     telebot.util.antiflood(
