@@ -55,7 +55,7 @@ def describe_photo(photo_encoded):
                 {
                     'type': 'input_image',
                     'image_url': f'data:image/jpeg;base64,{photo_encoded}',
-                    'detail': 'low'
+                    'detail': 'high'
                 }
             ]
         }
@@ -141,7 +141,7 @@ def describe_image_handler(message):
         text = (
             f'🖼  <b>Descrição automática:</b>'
             f'\n<blockquote expandable>{description}</blockquote>'
-            f'\n💳 <i>Custo: US$ {total_cost:.4f}</i>'
+            f'\n💳 <span class="tg-spoiler">Custo: US$ {total_cost:.4f}</span>'
         )
         remove_photo(photo_name)
     else:
