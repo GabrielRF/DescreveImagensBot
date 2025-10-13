@@ -51,7 +51,7 @@ def describe_photo(photo_encoded):
     input=[
         {'role': 'user', 'content':
             [
-                {'type': 'input_text', 'text': 'Descreva a imagem. Caso haja texto, transcreva ao fim da descrição. Não use formatação HTML ou Markdown.'},
+                {'type': 'input_text', 'text': 'Descreva a imagem. Caso haja texto, transcreva ao fim da descrição. Caso haja texto e não seja em português, adicione também a versão traduzida. Não use formatação HTML ou Markdown.'},
                 {
                     'type': 'input_image',
                     'image_url': f'data:image/jpeg;base64,{photo_encoded}',
