@@ -173,24 +173,27 @@ def describe_sticker_handler(message):
         f'https://api.telegram.org/file/bot{TOKEN}/' +
         f'{bot.get_file(message.sticker.file_id).file_path}'
     )
-    moderated = moderate_content(photo_url)
-    if not moderated:
-        photo_name = download_sticker(message)
-        photo_encoded = encode_image(photo_name)
-        description, total_cost = describe_photo(photo_encoded)
-        text = (
-            f'🖼   <b>Descrição automática:</b>'
-            f'\n<blockquote expandable>{description}</blockquote>'
-            f'\n💳 <span class="tg-spoiler">Custo: US$ {total_cost:.4f}</span>'
-        )
-        remove_photo(photo_name)
-    else:
-        text = (
-            f'⚠️ <b>Sticker ignorado</b>!'
-            f'\n\n<b>📋 Motivos</b>:'
-            f'\n<code>{moderated}</code>'
-        )
-    send_result(message, text)
+    try:
+        moderated = moderate_content(photo_url)
+        if not moderated:
+            photo_name = download_sticker(message)
+            photo_encoded = encode_image(photo_name)
+            description, total_cost = describe_photo(photo_encoded)
+            text = (
+                f'🖼   <b>Descrição automática:</b>'
+                f'\n<blockquote expandable>{description}</blockquote>'
+                f'\n💳 <span class="tg-spoiler">Custo: US$ {total_cost:.4f}</span>'
+            )
+            remove_photo(photo_name)
+        else:
+            text = (
+                f'⚠️ <b>Sticker ignorado</b>!'
+                f'\n\n<b>📋 Motivos</b>:'
+                f'\n<code>{moderated}</code>'
+            )
+        send_result(message, text)
+    except:
+        pass
     react_to_message(message.chat.id, message.message_id, None)
 
 if __name__ == "__main__":
