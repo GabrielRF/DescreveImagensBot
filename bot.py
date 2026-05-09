@@ -41,6 +41,15 @@ def download_photo(message):
         new_photo.write(photo_download)
     return photo_name
 
+def download_sticker(message):
+    photo_info = bot.get_file(message.sticker.file_id)
+    photo_download = bot.download_file(photo_info.file_path)
+    photo_name = f'{photo_info.file_unique_id[:6]}.{photo_info.file_path.split(".")[-1]}'
+    with open(photo_name, 'wb') as new_photo:
+        new_photo.write(photo_download)
+    return photo_name
+
+
 def encode_image(photo_name):
   with open(photo_name, "rb") as photo_file:
     return base64.b64encode(photo_file.read()).decode('utf-8')
@@ -147,6 +156,37 @@ def describe_image_handler(message):
     else:
         text = (
             f'⚠️ <b>Imagem ignorada</b>!'
+            f'\n\n<b>📋 Motivos</b>:'
+            f'\n<code>{moderated}</code>'
+        )
+    send_result(message, text)
+    react_to_message(message.chat.id, message.message_id, None)
+
+@bot.message_handler(chat_types=['group', 'supergroup', 'private'], content_types=['sticker'])
+@bot.edited_message_handler(chat_types=['group', 'supergroup', 'private'], content_types=['sticker'])
+def describe_sticker_handler(message):
+    if message.chat.id not in CHATIDS:
+        bot.reply_to(message, "<b>Acesso negado</b>\nBot em alpha privado.", parse_mode='HTML')
+        return
+    react_to_message(message.chat.id, message.message_id, '👀')
+    photo_url = (
+        f'https://api.telegram.org/file/bot{TOKEN}/' +
+        f'{bot.get_file(message.sticker.file_id).file_path}'
+    )
+    moderated = moderate_content(photo_url)
+    if not moderated:
+        photo_name = download_sticker(message)
+        photo_encoded = encode_image(photo_name)
+        description, total_cost = describe_photo(photo_encoded)
+        text = (
+            f'🖼   <b>Descrição automática:</b>'
+            f'\n<blockquote expandable>{description}</blockquote>'
+            f'\n💳 <span class="tg-spoiler">Custo: US$ {total_cost:.4f}</span>'
+        )
+        remove_photo(photo_name)
+    else:
+        text = (
+            f'⚠️ <b>Sticker ignorado</b>!'
             f'\n\n<b>📋 Motivos</b>:'
             f'\n<code>{moderated}</code>'
         )
