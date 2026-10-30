@@ -18,4 +18,4 @@ jobs:
         command: |
           cd /root/Git/DescreveImagensBot
           git pull origin main
-          systemctl restart tg_descreveimagensbot
+          systemctl restart tg_descreveimagens.service
